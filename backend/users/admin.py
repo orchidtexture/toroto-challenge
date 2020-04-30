@@ -13,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = [
         'email',
         'username',
-        'co2_tons_per_year',
+        'toroto_staff',
     ]
     fieldsets = (
       (None, {
@@ -29,9 +29,9 @@ class CustomUserAdmin(UserAdmin):
           'email'
         )
       }),
-      ('Carbon Footprint info', {
+      ('Role', {
         'fields': (
-          'co2_tons_per_year',
+          'toroto_staff',
         )
       }),
       ('Permissions', {
