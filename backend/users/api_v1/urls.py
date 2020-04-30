@@ -9,5 +9,9 @@ urlpatterns = [
         view=endpoints.CreateUser.as_view(),
         name='user_create'
     ),
-
+    path(
+        route='users/<id>/',
+        view=endpoints.RetrieveUpdateDestroyUser.as_view(),
+        name='user_retrieve'
+    ),
 ]

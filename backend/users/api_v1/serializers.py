@@ -19,3 +19,4 @@ class CustomUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'username': {'read_only': True},
         }
+        partial = True
