@@ -1,11 +1,18 @@
 version: "3.2"
 services:
+  postgres:
+    image: postgres
+    container_name: toroto_postgres
+    ports:
+      - "5432:5432"
   backend:
     build: ./backend
     volumes:
       - ./backend:/app/backend
     ports:
       - "8000:8000"
+    depends_on:
+      - postgres
     stdin_open: true
     tty: true
     command: python3 manage.py runserver 0.0.0.0:8000
