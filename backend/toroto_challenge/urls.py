@@ -22,4 +22,8 @@ urlpatterns = [
         ('users.api_v1.urls', 'api_v1'),
         namespace='api_v1_users')
     ),
+    path('api/v1/', include(
+        ('subscriptions.api_v1.urls', 'api_v1'),
+        namespace='api_v1_subscriptions')
+    ),
 ]
