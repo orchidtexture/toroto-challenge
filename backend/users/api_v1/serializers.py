@@ -10,7 +10,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     """
     This serializer provides the CustomUser fields needed for it's creation
     """
-    subscription = SubscriptionSerializer(read_only=True)
+    subscription = SubscriptionSerializer(required=False)
     class Meta:
         model = CustomUser
         fields = (
@@ -25,9 +25,34 @@ class CustomUserSerializer(serializers.ModelSerializer):
         )
         extra_kwargs = {
             'username': {'read_only': True},
-            'co2_tons_per_year': {'required': True}
+            'co2_tons_per_year': {'required': True},
+            'password': {'write_only': True},
         }
         partial = True
+
+    # def update(self, instance, validated_data):
+    #     subscription = validated_data.get('subscription')
+    #     print(subscription.get('monthly_fee'))
+    #     instance.subscription.monthly_fee = subscription.get('monthly_fee')
+    #     print(instance.subscription.monthly_fee)
+    #     instance.subscription.save()
+
+    #     return instance
+
+    def update(self, instance, validated_data):
+        subscription_data = validated_data.pop('subscription')
+        instance.subscription.monthly_fee = subscription_data.get(
+            'monthly_fee', 
+            instance.subscription.monthly_fee
+        )
+        instance.subscription.co2_tons_per_month = subscription_data.get(
+            'co2_tons_per_month', 
+            instance.subscription.co2_tons_per_month
+        )
+        instance.save()
+
+        return instance
+
 
 
 class LogInSerializer(serializers.Serializer):

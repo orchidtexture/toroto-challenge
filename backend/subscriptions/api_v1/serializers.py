@@ -16,7 +16,3 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             'monthly_fee',
             'co2_tons_per_month',
         )
-        extra_kwargs = {
-            'monthly_fee': {'read_only': True},
-            'co2_tons_per_month': {'read_only': True}
-        }

@@ -1,6 +1,8 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
 
 from users.models import CustomUser
 
@@ -9,6 +11,8 @@ from .serializers import SubscriptionSerializer
 
 class CreateSubscription(APIView):
     """ Endpoint responsible for creating a subscription """
+    throttle_classes = ()
+    permission_classes = (IsAuthenticated,)
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
 
