@@ -13,12 +13,13 @@ class CustomUserAdmin(UserAdmin):
     list_display = [
         'email',
         'username',
+        'co2_tons_per_year',
     ]
     fieldsets = (
       (None, {
         'fields': (
           'username',
-          'password'
+          'password',
         )
       }),
       ('Personal info', {
@@ -26,6 +27,11 @@ class CustomUserAdmin(UserAdmin):
           'first_name',
           'last_name',
           'email'
+        )
+      }),
+      ('Carbon Footprint info', {
+        'fields': (
+          'co2_tons_per_year',
         )
       }),
       ('Permissions', {
