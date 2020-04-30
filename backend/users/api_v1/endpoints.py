@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 from users.models import CustomUser
@@ -32,7 +32,7 @@ class CustomAuthToken(APIView):
     Endpoint responsible for authenticating an user and generating a token 
     """
     throttle_classes = ()
-    permission_classes = ()
+    permission_classes = (AllowAny,)
     serializer_class = LogInSerializer
 
     def post(self, request, *args, **kwargs):

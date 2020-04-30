@@ -10,12 +10,12 @@ urlpatterns = [
         name='users_list'
     ),
     path(
-        route='users/register',
+        route='users/register/',
         view=endpoints.RegisterUserEndpoint.as_view(),
         name='user_register'
     ),
     path(
-        route='users/login',
+        route='users/login/',
         view=endpoints.CustomAuthToken.as_view(),
         name='user_login'
     ),

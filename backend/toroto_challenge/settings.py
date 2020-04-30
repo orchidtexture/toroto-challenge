@@ -25,7 +25,7 @@ SECRET_KEY = 'w&x6p_9l17-xf9lery^4*mfe5uvhgvzy^-&-cf8bkw63q5mw5y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["backend", "localhost"]
 
 
 # Application definition
@@ -61,6 +61,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ),
 }
 
