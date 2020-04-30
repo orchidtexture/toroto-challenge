@@ -8,12 +8,18 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     """
     This serializer provides the Subscription fields needed for it's creation
     """
-    user = CustomUserSerializer()
+    user_id = serializers.UUIDField(format='hex')
+
     class Meta:
         model = Subscription
         fields = (
             'id',
-            'user',
+            'user_id',
             'monthly_fee',
             'co2_tons_per_month',
         )
+        extra_kwargs = {
+            'user_id': {'write_only': True},
+            'monthly_fee': {'read_only': True},
+            'co2_tons_per_month': {'read_only': True}
+        }

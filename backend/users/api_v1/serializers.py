@@ -18,5 +18,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         )
         extra_kwargs = {
             'username': {'read_only': True},
+            'co2_tons_per_year': {'required': True}
         }
         partial = True

@@ -18,13 +18,6 @@ class CustomUser(AbstractUser):
         null=True, 
         blank=True
     )
-    subscription = models.OneToOneField(
-        'subscriptions.Subscription',
-        on_delete=models.CASCADE,
-        related_name='user',
-        null=True,
-        blank=True
-    )
     
     def __str__(self):
         return self.email
