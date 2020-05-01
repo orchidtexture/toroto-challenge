@@ -23,7 +23,7 @@ RUN $HOME/.yarn/bin/yarn install
 COPY . /app/
 
 COPY ./backend/devutils/wait-for-postgres.sh /devutils/wait-for-postgres.sh
-RUN chmod +x devutils/wait-for-postgres.sh
+RUN chmod +x /devutils/wait-for-postgres.sh
 
 # Build static files
 RUN $HOME/.yarn/bin/yarn build
