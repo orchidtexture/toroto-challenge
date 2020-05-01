@@ -76,7 +76,7 @@ class login extends Component {
     };
     console.log(userData);
     axios
-      .post("/api/v1/users/login", userData)
+      .post("/api/v1/users/login/", userData)
       .then((response) => {
         localStorage.setItem("token", `Token ${response.data.token}`);
         this.setState({

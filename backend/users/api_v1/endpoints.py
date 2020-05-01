@@ -4,6 +4,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+from django.shortcuts import get_object_or_404
+
 
 from users.models import CustomUser, Subscriber
 
@@ -74,7 +76,11 @@ class RetrieveUpdateDestroyStaff(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    lookup_field = 'id'
+    
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, email=self.request.user.email)
+        return obj
 
 
 class RetrieveSubscribersList(generics.ListAPIView):

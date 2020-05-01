@@ -15,7 +15,7 @@ urlpatterns = [
         name='staff_register'
     ),
     path(
-        route='users/<uuid:id>/',
+        route='users/',
         view=endpoints.RetrieveUpdateDestroyStaff.as_view(),
         name='staff_retrieve'
     ),
