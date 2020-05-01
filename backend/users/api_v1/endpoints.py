@@ -36,7 +36,7 @@ class RegisterStaffUserEndpoint(APIView):
 
 
 class CreateSubscriberEndpoint(generics.CreateAPIView):
-    """ Endpoint responsible for creating a user """
+    """ Endpoint responsible for creating a subscriber """
     throttle_classes = ()
     permission_classes = (IsAuthenticated,)
     serializer_class = SubscriberSerializer

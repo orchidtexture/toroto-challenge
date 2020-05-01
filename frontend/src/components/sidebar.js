@@ -84,7 +84,7 @@ class ResponsiveDrawer extends React.Component {
           <ListItem
             button
             key="Subscribers"
-            onClick={this.props.drawerData.loadListPage}
+            onClick={this.props.drawerData.loadSubscriberPage}
           >
             <ListItemIcon>
               {" "}

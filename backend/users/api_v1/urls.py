@@ -21,7 +21,7 @@ urlpatterns = [
     ),
 
     path(
-        route='users/subscribers/',
+        route='subscribers/new/',
         view=endpoints.CreateSubscriberEndpoint.as_view(),
         name='subscribers'
     ),

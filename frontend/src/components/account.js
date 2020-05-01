@@ -87,7 +87,6 @@ class account extends Component {
     axios
       .get("/api/v1/users/")
       .then((response) => {
-        console.log(response.data);
         this.setState({
           firstName: response.data.first_name,
           lastName: response.data.last_name,

@@ -89,15 +89,17 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-class list extends Component {
+class subscriber extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      lists: "",
-      name: "",
-      body: "",
-      listId: "",
+      subscribers: "",
+      firstName: "",
+      lastName: "",
+      co2PerYear: "",
+      subscriberId: "",
+      subscription: "",
       errors: [],
       open: false,
       uiLoading: true,
@@ -118,13 +120,13 @@ class list extends Component {
 
   componentWillMount = () => {
     authMiddleWare(this.props.history);
-    const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    const token = localStorage.getItem("token");
+    axios.defaults.headers.common = { Authorization: `${token}` };
     axios
-      .get("/lists")
+      .get("/api/v1/subscribers/")
       .then((response) => {
         this.setState({
-          lists: response.data,
+          subscribers: response.data,
           uiLoading: false,
         });
       })
@@ -135,11 +137,11 @@ class list extends Component {
 
   deleteTodoHandler(data) {
     authMiddleWare(this.props.history);
-    const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
-    let listId = data.list.listId;
+    const token = localStorage.getItem("token");
+    axios.defaults.headers.common = { Authorization: `${token}` };
+    let subscriberId = data.subscriber.id;
     axios
-      .delete(`list/${listId}`)
+      .delete(`api/v1/subscribers/${subscriberId}`)
       .then(() => {
         window.location.reload();
       })
@@ -150,18 +152,24 @@ class list extends Component {
 
   handleEditClickOpen(data) {
     this.setState({
-      name: data.list.name,
-      body: data.list.body,
-      listId: data.list.listId,
+      firstName: data.subscriber.first_name,
+      lastName: data.subscriber.last_name,
+      email: data.subscriber.email,
+      co2PerYear: data.subscriber.co2_tons_per_year,
+      subscriberId: data.subscriber.id,
       buttonType: "Edit",
       open: true,
     });
   }
 
   handleViewOpen(data) {
+    console.log(data.subscriber.subscription);
     this.setState({
-      name: data.list.name,
-      body: data.list.body,
+      firstName: data.subscriber.first_name,
+      lastName: data.subscriber.last_name,
+      email: data.subscriber.email,
+      co2PerYear: data.subscriber.co2_tons_per_year,
+      subscription: data.subscriber.subscription,
       viewOpen: true,
     });
   }
@@ -196,9 +204,9 @@ class list extends Component {
 
     const handleClickOpen = () => {
       this.setState({
-        listId: "",
-        name: "",
-        body: "",
+        suscriberId: "",
+        firstName: "",
+        lastName: "",
         buttonType: "",
         open: true,
       });
@@ -207,26 +215,38 @@ class list extends Component {
     const handleSubmit = (event) => {
       authMiddleWare(this.props.history);
       event.preventDefault();
-      const userList = {
-        name: this.state.name,
-        body: this.state.body,
+      const subscriber = {
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
+        email: this.state.email,
+        co2_tons_per_year: this.state.co2PerYear,
+        subscription: {
+          monthly_fee: this.state.subscription.monthly_fee,
+          co2_tons_per_month: this.state.subscription.co2_tons_per_month,
+        },
+      };
+      const subscriberWithoutSubscription = {
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
+        email: this.state.email,
+        co2_tons_per_year: this.state.co2PerYear,
       };
       let options = {};
       if (this.state.buttonType === "Edit") {
         options = {
-          url: `/list/${this.state.listId}`,
-          method: "put",
-          data: userList,
+          url: `/api/v1/subscribers/${this.state.subscriberId}/`,
+          method: "patch",
+          data: subscriber,
         };
       } else {
         options = {
-          url: "/list",
+          url: "/api/v1/subscribers/new/",
           method: "post",
-          data: userList,
+          data: subscriberWithoutSubscription,
         };
       }
-      const authToken = localStorage.getItem("AuthToken");
-      axios.defaults.headers.common = { Authorization: `${authToken}` };
+      const token = localStorage.getItem("token");
+      axios.defaults.headers.common = { Authorization: `${token}` };
       axios(options)
         .then(() => {
           this.setState({ open: false });
@@ -263,7 +283,7 @@ class list extends Component {
           <IconButton
             className={classes.floatingButton}
             color="primary"
-            aria-label="Add List"
+            aria-label="Add Subscriber"
             onClick={handleClickOpen}
           >
             <AddCircleIcon style={{ fontSize: 60 }} />
@@ -286,8 +306,8 @@ class list extends Component {
                 </IconButton>
                 <Typography variant="h6" className={classes.name}>
                   {this.state.buttonType === "Edit"
-                    ? "Edit Todo"
-                    : "Create a new Todo"}
+                    ? "Editar suscriptor"
+                    : "Crear nuevo suscriptor"}
                 </Typography>
                 <Button
                   autoFocus
@@ -295,7 +315,7 @@ class list extends Component {
                   onClick={handleSubmit}
                   className={classes.submitButton}
                 >
-                  {this.state.buttonType === "Edit" ? "Save" : "Submit"}
+                  {this.state.buttonType === "Edit" ? "Save" : "Crear"}
                 </Button>
               </Toolbar>
             </AppBar>
@@ -303,37 +323,59 @@ class list extends Component {
             <form className={classes.form} noValidate>
               <div className={classes.toolbar}></div>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <TextField
                     variant="outlined"
                     required
                     fullWidth
-                    id="listName"
-                    label="List Name"
-                    name="name"
-                    autoComplete="listName"
-                    helperText={errors.name}
-                    value={this.state.name}
+                    id="subscriberFirstName"
+                    label="First Name"
+                    name="firstName"
+                    autoComplete="subscriberFirstName"
+                    helperText={errors.firstName}
+                    value={this.state.firstName}
                     error={errors.name ? true : false}
                     onChange={this.handleChange}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <TextField
                     variant="outlined"
                     required
                     fullWidth
-                    id="listDetails"
-                    label="List Details"
-                    name="body"
-                    autoComplete="todoDetails"
-                    multiline
-                    rows={25}
-                    rowsMax={25}
-                    helperText={errors.body}
-                    error={errors.body ? true : false}
+                    id="subscriberLastName"
+                    label="Last Name"
+                    name="lastName"
+                    autoComplete="subscriberLastName"
+                    helperText={errors.lastName}
+                    value={this.state.lastName}
+                    error={errors.lastName ? true : false}
                     onChange={this.handleChange}
-                    value={this.state.body}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    label="Email"
+                    name="email"
+                    value={this.state.email}
+                    onChange={this.handleChange}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="subscriberCo2PerYear"
+                    label="Co2 per year"
+                    name="co2PerYear"
+                    helperText={errors.co2PerYear}
+                    value={this.state.co2PerYear}
+                    error={errors.co2PerYear ? true : false}
+                    onChange={this.handleChange}
                   />
                 </Grid>
               </Grid>
@@ -341,39 +383,39 @@ class list extends Component {
           </Dialog>
 
           <Grid container spacing={2}>
-            {this.state.lists.map((list) => (
+            {this.state.subscribers.map((subscriber) => (
               <Grid item xs={12} sm={6}>
                 <Card className={classes.root} variant="outlined">
                   <CardContent>
-                    <Typography variant="h5" component="h2">
-                      {list.name}
+                    <Typography component="h4">
+                      {subscriber.first_name} {subscriber.last_name}
                     </Typography>
-                    <Typography variant="body2" component="p">
-                      {`${list.body.substring(0, 65)}`}
+                    <Typography className={classes.pos} color="textSecondary">
+                      {subscriber.email}
                     </Typography>
                   </CardContent>
                   <CardActions>
                     <Button
                       size="small"
                       color="primary"
-                      onClick={() => this.handleViewOpen({ list })}
+                      onClick={() => this.handleViewOpen({ subscriber })}
                     >
                       {" "}
-                      View{" "}
+                      Ver{" "}
                     </Button>
                     <Button
                       size="small"
                       color="primary"
-                      onClick={() => this.handleEditClickOpen({ list })}
+                      onClick={() => this.handleEditClickOpen({ subscriber })}
                     >
-                      Edit
+                      Editar
                     </Button>
                     <Button
                       size="small"
                       color="primary"
-                      onClick={() => this.deleteTodoHandler({ list })}
+                      onClick={() => this.deleteTodoHandler({ subscriber })}
                     >
-                      Delete
+                      Eliminar
                     </Button>
                   </CardActions>
                 </Card>
@@ -389,22 +431,21 @@ class list extends Component {
             classes={{ paperFullWidth: classes.dialogeStyle }}
           >
             <DialogTitle id="customized-dialog-name" onClose={handleViewClose}>
-              {this.state.name}
+              {this.state.firstName} {this.state.lastName}
             </DialogTitle>
             <DialogContent dividers>
-              <TextField
-                fullWidth
-                id="listDetails"
-                name="body"
-                multiline
-                readonly
-                rows={1}
-                rowsMax={25}
-                value={this.state.body}
-                InputProps={{
-                  disableUnderline: true,
-                }}
-              />
+              <Typography component="h4">{this.state.email}</Typography>
+              <Typography component="h4">{this.state.co2PerYear}</Typography>
+              <Typography component="h4">
+                {this.state.subscription != null
+                  ? this.state.subscription.monthly_fee
+                  : ""}
+              </Typography>
+              <Typography component="h4">
+                {this.state.subscription != null
+                  ? this.state.subscription.co2_tons_per_month
+                  : ""}
+              </Typography>
             </DialogContent>
           </Dialog>
         </main>
@@ -413,4 +454,4 @@ class list extends Component {
   }
 }
 
-export default withStyles(styles)(list);
+export default withStyles(styles)(subscriber);
