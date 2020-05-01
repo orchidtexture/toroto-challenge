@@ -1,8 +1,8 @@
 import uuid
 
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
 
 # Create your models here.
 
@@ -30,13 +30,15 @@ class Subscription(models.Model):
     
     def __str__(self):
         return 'Subscription for ' + self.subscriber.email
-@receiver(pre_save, sender=Subscription)
-def complete_subscription_data(sender, instance, *args, **kwargs):
-    """ 
-    Sets the co2_tons_per_month and monthly_fee according to the user carbon 
-    footprint info 
-    """
-    co2_tons_per_year = instance.subscriber.co2_tons_per_year
-    # Insert Toroto's secret formula here
-    instance.co2_tons_per_month =  co2_tons_per_year / 12
-    instance.monthly_fee = float(instance.co2_tons_per_month) * 12.0
+
+
+# @receiver(post_save, sender=Subscription)
+# def complete_subscription_data(sender, instance, *args, **kwargs):
+#     """ 
+#     Sets the co2_tons_per_month and monthly_fee according to the user carbon 
+#     footprint info 
+#     """
+#     co2_tons_per_year = instance.subscriber.co2_tons_per_year
+#     # Insert Toroto's secret formula here
+#     instance.co2_tons_per_month =  co2_tons_per_year / 12
+#     instance.monthly_fee = float(instance.co2_tons_per_month) * 12.0

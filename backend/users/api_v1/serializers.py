@@ -46,35 +46,49 @@ class SubscriberSerializer(serializers.ModelSerializer):
             'subscription'
         )
         extra_kwargs = {
-            'co2_tons_per_year': {'required': True},
-            'has_subscription': {'read_only': True}
+            'co2_tons_per_year': {'required': True}
         }
         partial = True
 
 
-    def update(self, instance, validated_data):
-        email = validated_data.get('email')
-        first_name = validated_data.get('first_name')
-        last_name = validated_data.get('last_name')
-        co2_tons_per_year = validated_data.get('co2_tons_per_year')
-        instance.email = email
-        instance.first_name = first_name
-        instance.last_name = last_name
-        instance.co2_tons_per_year = co2_tons_per_year
-        if validated_data.get('has_subscription') is True:
-            subscription_data = validated_data.pop('subscription')
-            instance.subscription.monthly_fee = subscription_data.get(
-                'monthly_fee', 
-                instance.subscription.monthly_fee
-            )
-            instance.subscription.co2_tons_per_month = subscription_data.get(
-                'co2_tons_per_month', 
-                instance.subscription.co2_tons_per_month
-            )
-        print(instance)
-        instance.save()
+    # def update(self, instance, validated_data):
+    #     email = validated_data.get('email')
+    #     first_name = validated_data.get('first_name')
+    #     last_name = validated_data.get('last_name')
+    #     co2_tons_per_year = validated_data.get('co2_tons_per_year')
+    #     instance.email = email
+    #     instance.first_name = first_name
+    #     instance.last_name = last_name
+    #     instance.co2_tons_per_year = co2_tons_per_year
+    #     if validated_data.get('has_subscription') is True:
+    #         subscription_data = validated_data.pop('subscription')
+    #         print(subscription_data.get('monthly_fee'))
+    #         instance.subscription.monthly_fee = subscription_data.get(
+    #             'monthly_fee', 
+    #             instance.subscription.monthly_fee
+    #         )
+    #         instance.subscription.co2_tons_per_month = subscription_data.get(
+    #             'co2_tons_per_month', 
+    #             instance.subscription.co2_tons_per_month
+    #         )
+    #     for key, value in validated_data.items():
+    #         print(key, value)
 
-        return instance
+    #     return super(SubscriberSerializer, self).update(instance, validated_data)
+
+    def update(self, instance, validated_data):
+        if validated_data.get('has_subscription') is True:
+            nested_serializer = self.fields['subscription']
+            nested_instance = instance.subscription
+            # note the data is `pop`ed
+            nested_data = dict(validated_data.pop('subscription'))
+            print(nested_data)
+            print(nested_instance)
+            nested_serializer.update(nested_instance, nested_data)
+            print(nested_serializer.data)
+        # this will not throw an exception,
+        # as `profile` is not part of `validated_data`
+        return super(SubscriberSerializer, self).update(instance, validated_data)
 
 
 class LogInSerializer(serializers.Serializer):

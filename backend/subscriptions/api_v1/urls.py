@@ -8,4 +8,9 @@ urlpatterns = [
         view=endpoints.CreateSubscription.as_view(),
         name='subscription_create'
     ),
+    path(
+        route='subscriptions/<uuid:id>/',
+        view=endpoints.RetrieveSubscription.as_view(),
+        name='subscription_retrieve'
+    ),
 ]

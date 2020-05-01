@@ -16,3 +16,17 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             'monthly_fee',
             'co2_tons_per_month',
         )
+        extra_kwargs = {
+            'id': {'read_only': True}
+        }
+
+
+class SubscriptionUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subscription
+        fields = (
+            'monthly_fee',
+            'co2_tons_per_month'
+        )
+
