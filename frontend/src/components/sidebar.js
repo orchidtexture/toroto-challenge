@@ -133,7 +133,7 @@ class ResponsiveDrawer extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              Subscribers
+              Subscribers admin
             </Typography>
           </Toolbar>
         </AppBar>

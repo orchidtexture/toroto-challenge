@@ -247,7 +247,7 @@ class account extends Component {
             className={classes.submitButton}
             onClick={this.updateFormValues}
           >
-            Save details
+            Save
             {this.state.buttonLoading && (
               <CircularProgress size={30} className={classes.progess} />
             )}

@@ -71,8 +71,8 @@ class signup extends Component {
     event.preventDefault();
     this.setState({ loading: true });
     const newUserData = {
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
+      first_name: this.state.firstName,
+      last_name: this.state.lastName,
       email: this.state.email,
       password: this.state.password,
       confirmPassword: this.state.confirmPassword,
