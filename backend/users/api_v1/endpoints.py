@@ -5,12 +5,17 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
-from users.models import CustomUser
+from users.models import CustomUser, Subscriptor
 
-from .serializers import CustomUserSerializer, LogInSerializer
+from .serializers import (
+    CustomUserSerializer, 
+    LogInSerializer, 
+    SubscriptorSerializer
+)
 
-class RegisterUserEndpoint(APIView):
-    """ Endpoint responsible for creating an user """
+
+class RegisterStaffUserEndpoint(APIView):
+    """ Endpoint responsible for creating a Toroto staff user """
     throttle_classes = ()
     permission_classes = ()
     serializer_class = CustomUserSerializer
@@ -20,12 +25,20 @@ class RegisterUserEndpoint(APIView):
         serializer.is_valid(raise_exception=True)
         username = serializer.validated_data['email']
         serializer.validated_data['username'] = username
+        serializer.validated_data['toroto_staff'] = True
         user = CustomUser.objects.create_user(**serializer.validated_data)
         
         token = Token.objects.create(user=user)
                         
         return Response({'token': token.key})
 
+
+class CreateSubscriptorEndpoint(generics.CreateAPIView):
+    """ Endpoint responsible for creating a user """
+    throttle_classes = ()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = SubscriptorSerializer
+    
 
 class CustomAuthToken(APIView):
     """ 
@@ -50,21 +63,35 @@ class CustomAuthToken(APIView):
         return Response({
             'token': token.key
         })
-        
 
-class RetrieveUserList(generics.ListAPIView):
-    """ Endpoint responsible for returning users list """
-    throttle_classes = ()
-    permission_classes = (IsAuthenticated,)
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
 
-class RetrieveUpdateDestroyUser(generics.RetrieveUpdateDestroyAPIView):
+class RetrieveUpdateDestroyStaff(generics.RetrieveUpdateDestroyAPIView):
     """
-    Endpoint responsible for retrieving, updating and destroying user instances
+    Endpoint responsible for retrieving, updating and destroying Staff 
+    instances
     """
     throttle_classes = ()
     permission_classes = (IsAuthenticated,)
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    lookup_field = 'id'
+
+
+class RetrieveSubscriptorsList(generics.ListAPIView):
+    """ Endpoint responsible for returning a subscriptors list """
+    throttle_classes = ()
+    permission_classes = (IsAuthenticated,)
+    queryset = Subscriptor.objects.all()
+    serializer_class = SubscriptorSerializer
+
+
+class RetrieveUpdateDestroySubscriptor(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Endpoint responsible for retrieving, updating and destroying subscriptor 
+    instances
+    """
+    throttle_classes = ()
+    permission_classes = (IsAuthenticated,)
+    queryset = Subscriptor.objects.all()
+    serializer_class = SubscriptorSerializer
     lookup_field = 'id'

@@ -26,16 +26,17 @@ def define_email(sender, instance, **kwargs):
 class Subscriptor(models.Model):
     """ User model for subscriptor """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField()
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     co2_tons_per_year = models.DecimalField(
         max_digits=8, 
         decimal_places=2, 
         null=True, 
         blank=True
     )
-    user = models.OneToOneField(
-        'users.CustomUser',
-        on_delete=models.CASCADE,
-        related_name='subscriptor')
+    creation_date = models.DateField(auto_now_add=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.email

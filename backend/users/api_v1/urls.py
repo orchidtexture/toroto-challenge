@@ -5,14 +5,25 @@ from users.api_v1 import endpoints
 urlpatterns = [
     # {% url 'api_v1_users:users' %}
     path(
-        route='users/',
-        view=endpoints.RetrieveUserList.as_view(),
-        name='users_list'
+        route='subscriptors/',
+        view=endpoints.RetrieveSubscriptorsList.as_view(),
+        name='subscriptors_list'
     ),
     path(
-        route='users/register/',
-        view=endpoints.RegisterUserEndpoint.as_view(),
-        name='user_register'
+        route='users/staff/register/',
+        view=endpoints.RegisterStaffUserEndpoint.as_view(),
+        name='staff_register'
+    ),
+    path(
+        route='users/<uuid:id>/',
+        view=endpoints.RetrieveUpdateDestroyStaff.as_view(),
+        name='staff_retrieve'
+    ),
+
+    path(
+        route='users/subscriptors/',
+        view=endpoints.CreateSubscriptorEndpoint.as_view(),
+        name='subscriptors'
     ),
     path(
         route='users/login/',
@@ -20,8 +31,8 @@ urlpatterns = [
         name='user_login'
     ),
     path(
-        route='users/<id>/',
-        view=endpoints.RetrieveUpdateDestroyUser.as_view(),
-        name='user_retrieve'
+        route='subscriptors/<uuid:id>/',
+        view=endpoints.RetrieveUpdateDestroySubscriptor.as_view(),
+        name='subscriptor_retrieve'
     ),
 ]

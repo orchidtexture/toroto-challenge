@@ -4,13 +4,13 @@ from rest_framework import serializers
 
 from subscriptions.api_v1.serializers import SubscriptionSerializer
 
-from users.models import CustomUser
+from users.models import CustomUser, Subscriptor
+
 
 class CustomUserSerializer(serializers.ModelSerializer):
     """
     This serializer provides the CustomUser fields needed for it's creation
     """
-    subscription = SubscriptionSerializer(required=False)
     class Meta:
         model = CustomUser
         fields = (
@@ -20,26 +20,44 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'password',
             'first_name',
             'last_name',
+        )
+        extra_kwargs = {
+            'username': {'read_only': True},
+            'password': {'write_only': True},
+            'id': {'read_only': True},
+        }
+        partial = True
+
+
+class SubscriptorSerializer(serializers.ModelSerializer):
+    """
+    This serializer provides the Subscribe fields needed for it's creation
+    """
+    subscription = SubscriptionSerializer(required=False)
+    class Meta:
+        model = Subscriptor
+        fields = (
+            'id',
+            'email',
+            'first_name',
+            'last_name',
             'co2_tons_per_year',
             'subscription'
         )
         extra_kwargs = {
-            'username': {'read_only': True},
             'co2_tons_per_year': {'required': True},
-            'password': {'write_only': True},
         }
         partial = True
 
-    # def update(self, instance, validated_data):
-    #     subscription = validated_data.get('subscription')
-    #     print(subscription.get('monthly_fee'))
-    #     instance.subscription.monthly_fee = subscription.get('monthly_fee')
-    #     print(instance.subscription.monthly_fee)
-    #     instance.subscription.save()
-
-    #     return instance
-
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data): # TODO: front tiene que postear todos los campos siempre
+        email = validated_data.get('email')
+        first_name = validated_data.get('first_name')
+        last_name = validated_data.get('last_name')
+        co2_tons_per_year = validated_data.get('co2_tons_per_year')
+        instance.email = email
+        instance.first_name = first_name
+        instance.last_name = last_name
+        instance.co2_tons_per_year = co2_tons_per_year
         subscription_data = validated_data.pop('subscription')
         instance.subscription.monthly_fee = subscription_data.get(
             'monthly_fee', 
@@ -52,7 +70,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-
 
 
 class LogInSerializer(serializers.Serializer):

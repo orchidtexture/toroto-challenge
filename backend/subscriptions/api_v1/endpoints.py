@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 
-from users.models import CustomUser
+from users.models import Subscriptor
 
 from subscriptions.models import Subscription
 from .serializers import SubscriptionSerializer
@@ -19,13 +19,12 @@ class CreateSubscription(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user_id = serializer.validated_data.pop("user_id")
+        subscriptor_id = serializer.validated_data.pop("subscriptor_id")
         print(bool(serializer.validated_data))
         try:
-            print(user_id)
-            user = CustomUser.objects.get(id=user_id)
-            Subscription.objects.create(**{'user': user})
-        except CustomUser.DoesNotExist:
+            subscriptor = Subscriptor.objects.get(id=subscriptor_id)
+            Subscription.objects.create(**{'subscriptor': subscriptor})
+        except Subscriptor.DoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)
  
         return Response(status.HTTP_201_CREATED)
