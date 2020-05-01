@@ -29,7 +29,7 @@ class Subscription(models.Model):
     )
     
     def __str__(self):
-        return 'Subscription for ' + self.subscriber.user.email
+        return 'Subscription for ' + self.subscriber.email
 @receiver(pre_save, sender=Subscription)
 def complete_subscription_data(sender, instance, *args, **kwargs):
     """ 

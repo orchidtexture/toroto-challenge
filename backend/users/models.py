@@ -40,4 +40,4 @@ class Subscriber(models.Model):
     has_subscription = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.email
+        return self.email
