@@ -1,15 +1,11 @@
 import os
 from toroto_challenge.settings.base import *
-import dj_database_url
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
     }
 }
-
-# Update database configuration with $DATABASE_URL.
-DATABASES['default'] = dj_database_url.config(conn_max_age=500)
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False
