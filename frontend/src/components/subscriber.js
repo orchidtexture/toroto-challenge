@@ -220,17 +220,14 @@ class subscriber extends Component {
         last_name: this.state.lastName,
         email: this.state.email,
         co2_tons_per_year: this.state.co2PerYear,
-        subscription: {
+      };
+      console.log(this.state.subscription);
+      if (this.state.subscription.length > 0) {
+        subscriber.subscription = {
           monthly_fee: this.state.subscription.monthly_fee,
           co2_tons_per_month: this.state.subscription.co2_tons_per_month,
-        },
-      };
-      const subscriberWithoutSubscription = {
-        first_name: this.state.firstName,
-        last_name: this.state.lastName,
-        email: this.state.email,
-        co2_tons_per_year: this.state.co2PerYear,
-      };
+        };
+      }
       let options = {};
       if (this.state.buttonType === "Edit") {
         options = {
@@ -242,7 +239,7 @@ class subscriber extends Component {
         options = {
           url: "/api/v1/subscribers/new/",
           method: "post",
-          data: subscriberWithoutSubscription,
+          data: subscriber,
         };
       }
       const token = localStorage.getItem("token");

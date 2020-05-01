@@ -59,15 +59,16 @@ class SubscriberSerializer(serializers.ModelSerializer):
         instance.first_name = first_name
         instance.last_name = last_name
         instance.co2_tons_per_year = co2_tons_per_year
-        subscription_data = validated_data.pop('subscription')
-        instance.subscription.monthly_fee = subscription_data.get(
-            'monthly_fee', 
-            instance.subscription.monthly_fee
-        )
-        instance.subscription.co2_tons_per_month = subscription_data.get(
-            'co2_tons_per_month', 
-            instance.subscription.co2_tons_per_month
-        )
+        if validated_data.get('subscription') is not None:
+            subscription_data = validated_data.pop('subscription')
+            instance.subscription.monthly_fee = subscription_data.get(
+                'monthly_fee', 
+                instance.subscription.monthly_fee
+            )
+            instance.subscription.co2_tons_per_month = subscription_data.get(
+                'co2_tons_per_month', 
+                instance.subscription.co2_tons_per_month
+            )
         instance.save()
 
         return instance
