@@ -77,17 +77,17 @@ class SubscriberSerializer(serializers.ModelSerializer):
     #     return super(SubscriberSerializer, self).update(instance, validated_data)
 
     def update(self, instance, validated_data):
-        if validated_data.get('has_subscription') is True:
+        print('aqui ando yo!!!!')
+        print(validated_data)
+        if validated_data.get('has_subscription') is True:          
             nested_serializer = self.fields['subscription']
             nested_instance = instance.subscription
-            # note the data is `pop`ed
             nested_data = dict(validated_data.pop('subscription'))
             print(nested_data)
             print(nested_instance)
             nested_serializer.update(nested_instance, nested_data)
             print(nested_serializer.data)
-        # this will not throw an exception,
-        # as `profile` is not part of `validated_data`
+
         return super(SubscriberSerializer, self).update(instance, validated_data)
 
 

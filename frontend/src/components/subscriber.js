@@ -100,6 +100,9 @@ class subscriber extends Component {
       co2PerYear: "",
       subscriberId: "",
       subscription: "",
+      monthlyFee: "",
+      co2PerMonth: "",
+      hasSubscription: "",
       errors: [],
       open: false,
       uiLoading: true,
@@ -150,16 +153,54 @@ class subscriber extends Component {
       });
   }
 
+  createSubscribeHandler(data) {
+    authMiddleWare(this.props.history);
+    const token = localStorage.getItem("token");
+    axios.defaults.headers.common = { Authorization: `${token}` };
+    const subscriberData = {
+      subscriber_id: data.subscriber.id,
+    };
+    let options = {
+      url: "api/v1/subscriptions/",
+      method: "post",
+      data: subscriberData,
+    };
+    axios(options)
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   handleEditClickOpen(data) {
-    this.setState({
-      firstName: data.subscriber.first_name,
-      lastName: data.subscriber.last_name,
-      email: data.subscriber.email,
-      co2PerYear: data.subscriber.co2_tons_per_year,
-      subscriberId: data.subscriber.id,
-      buttonType: "Edit",
-      open: true,
-    });
+    console.log(data.subscriber.has_subscription);
+    if (data.subscriber.subscription != null) {
+      this.setState({
+        firstName: data.subscriber.first_name,
+        lastName: data.subscriber.last_name,
+        email: data.subscriber.email,
+        co2PerYear: data.subscriber.co2_tons_per_year,
+        subscriberId: data.subscriber.id,
+        subscription: data.subscriber.subscription,
+        monthlyFee: data.subscriber.subscription.monthly_fee,
+        co2PerMonth: data.subscriber.subscription.co2_tons_per_month,
+        hasSubscription: data.subscriber.has_subscription,
+        buttonType: "Edit",
+        open: true,
+      });
+    } else {
+      this.setState({
+        firstName: data.subscriber.first_name,
+        lastName: data.subscriber.last_name,
+        email: data.subscriber.email,
+        co2PerYear: data.subscriber.co2_tons_per_year,
+        subscriberId: data.subscriber.id,
+        buttonType: "Edit",
+        open: true,
+      });
+    }
   }
 
   handleViewOpen(data) {
@@ -215,17 +256,18 @@ class subscriber extends Component {
     const handleSubmit = (event) => {
       authMiddleWare(this.props.history);
       event.preventDefault();
+      console.log(this.state.hasSubscription);
       const subscriber = {
         first_name: this.state.firstName,
         last_name: this.state.lastName,
         email: this.state.email,
         co2_tons_per_year: this.state.co2PerYear,
       };
-      console.log(this.state.subscription);
-      if (this.state.subscription.length > 0) {
+      if (this.state.hasSubscription == true) {
+        subscriber.has_subscription = this.state.hasSubscription;
         subscriber.subscription = {
-          monthly_fee: this.state.subscription.monthly_fee,
-          co2_tons_per_month: this.state.subscription.co2_tons_per_month,
+          monthly_fee: this.state.monthlyFee,
+          co2_tons_per_month: this.state.co2PerMonth,
         };
       }
       let options = {};
@@ -303,8 +345,8 @@ class subscriber extends Component {
                 </IconButton>
                 <Typography variant="h6" className={classes.name}>
                   {this.state.buttonType === "Edit"
-                    ? "Editar suscriptor"
-                    : "Crear nuevo suscriptor"}
+                    ? "Edit subscriber"
+                    : "Create new subscriber"}
                 </Typography>
                 <Button
                   autoFocus
@@ -312,7 +354,7 @@ class subscriber extends Component {
                   onClick={handleSubmit}
                   className={classes.submitButton}
                 >
-                  {this.state.buttonType === "Edit" ? "Save" : "Crear"}
+                  {this.state.buttonType === "Edit" ? "Save" : "Create"}
                 </Button>
               </Toolbar>
             </AppBar>
@@ -367,11 +409,57 @@ class subscriber extends Component {
                     required
                     fullWidth
                     id="subscriberCo2PerYear"
-                    label="Co2 per year"
+                    label="Co2 tons per year"
                     name="co2PerYear"
                     helperText={errors.co2PerYear}
                     value={this.state.co2PerYear}
                     error={errors.co2PerYear ? true : false}
+                    onChange={this.handleChange}
+                  />
+                </Grid>
+                <div></div>
+                <Grid
+                  item
+                  xs={12}
+                  hidden={this.state.hasSubscription == false ? true : false}
+                >
+                  <Typography component="h4" className={classes.name}>
+                    Subscription Details
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={6}
+                  hidden={this.state.hasSubscription == false ? true : false}
+                >
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="monthlyFee"
+                    label="Monthly fee"
+                    name="monthlyFee"
+                    helperText={errors.monthlyFee}
+                    value={this.state.monthlyFee}
+                    error={errors.monthlyFee ? true : false}
+                    onChange={this.handleChange}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={6}
+                  hidden={this.state.hasSubscription == false ? true : false}
+                >
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="co2PerMonth"
+                    label="co2 tons per month"
+                    name="co2PerMonth"
+                    helperText={errors.co2PerMonth}
+                    value={this.state.co2PerMonth}
+                    error={errors.co2PerMonth ? true : false}
                     onChange={this.handleChange}
                   />
                 </Grid>
@@ -398,21 +486,35 @@ class subscriber extends Component {
                       onClick={() => this.handleViewOpen({ subscriber })}
                     >
                       {" "}
-                      Ver{" "}
+                      View{" "}
                     </Button>
                     <Button
                       size="small"
                       color="primary"
                       onClick={() => this.handleEditClickOpen({ subscriber })}
                     >
-                      Editar
+                      Edit
                     </Button>
                     <Button
                       size="small"
                       color="primary"
                       onClick={() => this.deleteTodoHandler({ subscriber })}
                     >
-                      Eliminar
+                      Delete
+                    </Button>
+                    <Button
+                      disabled={
+                        subscriber.has_subscription == false ? false : true
+                      }
+                      size="small"
+                      color="primary"
+                      onClick={() =>
+                        this.createSubscribeHandler({ subscriber })
+                      }
+                    >
+                      {subscriber.has_subscription == false
+                        ? "Add subscription"
+                        : null}
                     </Button>
                   </CardActions>
                 </Card>
@@ -431,16 +533,30 @@ class subscriber extends Component {
               {this.state.firstName} {this.state.lastName}
             </DialogTitle>
             <DialogContent dividers>
+              <Typography component="h6" color="textSecondary">
+                Email
+              </Typography>
               <Typography component="h4">{this.state.email}</Typography>
-              <Typography component="h4">{this.state.co2PerYear}</Typography>
+              <Typography component="h6" color="textSecondary">
+                Carbon Footprint
+              </Typography>
+              <Typography component="h4">
+                {this.state.co2PerYear} CO2 tons/year
+              </Typography>
               <Typography component="h4">
                 {this.state.subscription != null
-                  ? this.state.subscription.monthly_fee
+                  ? this.state.subscription.co2_tons_per_month +
+                    " CO2 tons/month"
+                  : ""}
+              </Typography>
+              <Typography component="h6" color="textSecondary">
+                {this.state.subscription != null
+                  ? "Monthly fee (USD + Taxes)"
                   : ""}
               </Typography>
               <Typography component="h4">
                 {this.state.subscription != null
-                  ? this.state.subscription.co2_tons_per_month
+                  ? "$ " + this.state.subscription.monthly_fee
                   : ""}
               </Typography>
             </DialogContent>
