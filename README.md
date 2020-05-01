@@ -11,7 +11,8 @@
 1. Install docker https://www.docker.com/get-docker
 3. Install docker-compose https://docs.docker.com/compose/install/
 4. cd into root directory
-5. Start the **docker-compose** service.
+5. Migrate `docker-compose run backend python manage.py migrate`
+6. Start the **docker-compose** service.
 
 ## Basic Usage
 
