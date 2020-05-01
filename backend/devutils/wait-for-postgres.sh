@@ -18,8 +18,8 @@ until postgres_ready; do
   sleep 1
 done
 
-python manage.py makemigrations users --settings=toroto-challenge.settings
+python manage.py makemigrations users --settings=toroto-challenge.settings.development
 
-python manage.py migrate --settings=toroto-challenge.settings
+python manage.py migrate --settings=toroto-challenge.settings.development
 
-python manage.py runserver --settings=toroto-challenge.settings 0.0.0.0:8000
+python manage.py runserver --settings=toroto-challenge.settings.development 0.0.0.0:8000
