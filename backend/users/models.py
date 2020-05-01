@@ -37,6 +37,7 @@ class Subscriber(models.Model):
     )
     creation_date = models.DateField(auto_now_add=True)
     active = models.BooleanField(default=True)
+    has_subscription = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.email

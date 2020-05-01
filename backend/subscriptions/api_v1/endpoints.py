@@ -24,6 +24,8 @@ class CreateSubscription(APIView):
         try:
             subscriber = Subscriber.objects.get(id=subscriber_id)
             Subscription.objects.create(**{'subscriber': subscriber})
+            subscriber.has_subscription = True
+            subscriber.save()
         except Subscriber.DoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)
  

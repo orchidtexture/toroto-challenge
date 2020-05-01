@@ -42,15 +42,17 @@ class SubscriberSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'co2_tons_per_year',
+            'has_subscription',
             'subscription'
         )
         extra_kwargs = {
             'co2_tons_per_year': {'required': True},
+            'has_subscription': {'read_only': True}
         }
         partial = True
 
 
-    def update(self, instance, validated_data): # TODO: front tiene que postear todos los campos siempre
+    def update(self, instance, validated_data):
         email = validated_data.get('email')
         first_name = validated_data.get('first_name')
         last_name = validated_data.get('last_name')
