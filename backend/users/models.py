@@ -23,8 +23,8 @@ def define_email(sender, instance, **kwargs):
     instance.email = instance.username
 
 
-class Subscriptor(models.Model):
-    """ User model for subscriptor """
+class Subscriber(models.Model):
+    """ User model for subscriber """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField()
     first_name = models.CharField(max_length=50)

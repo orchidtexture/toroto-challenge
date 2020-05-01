@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from subscriptions.api_v1.serializers import SubscriptionSerializer
 
-from users.models import CustomUser, Subscriptor
+from users.models import CustomUser, Subscriber
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -29,13 +29,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
         partial = True
 
 
-class SubscriptorSerializer(serializers.ModelSerializer):
+class SubscriberSerializer(serializers.ModelSerializer):
     """
     This serializer provides the Subscribe fields needed for it's creation
     """
     subscription = SubscriptionSerializer(required=False)
     class Meta:
-        model = Subscriptor
+        model = Subscriber
         fields = (
             'id',
             'email',
@@ -48,6 +48,7 @@ class SubscriptorSerializer(serializers.ModelSerializer):
             'co2_tons_per_year': {'required': True},
         }
         partial = True
+
 
     def update(self, instance, validated_data): # TODO: front tiene que postear todos los campos siempre
         email = validated_data.get('email')

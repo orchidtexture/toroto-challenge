@@ -5,12 +5,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
-from users.models import CustomUser, Subscriptor
+from users.models import CustomUser, Subscriber
 
 from .serializers import (
     CustomUserSerializer, 
     LogInSerializer, 
-    SubscriptorSerializer
+    SubscriberSerializer
 )
 
 
@@ -33,11 +33,11 @@ class RegisterStaffUserEndpoint(APIView):
         return Response({'token': token.key})
 
 
-class CreateSubscriptorEndpoint(generics.CreateAPIView):
+class CreateSubscriberEndpoint(generics.CreateAPIView):
     """ Endpoint responsible for creating a user """
     throttle_classes = ()
     permission_classes = (IsAuthenticated,)
-    serializer_class = SubscriptorSerializer
+    serializer_class = SubscriberSerializer
     
 
 class CustomAuthToken(APIView):
@@ -77,21 +77,22 @@ class RetrieveUpdateDestroyStaff(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
 
 
-class RetrieveSubscriptorsList(generics.ListAPIView):
-    """ Endpoint responsible for returning a subscriptors list """
+class RetrieveSubscribersList(generics.ListAPIView):
+    """ Endpoint responsible for returning a subscribers list """
     throttle_classes = ()
     permission_classes = (IsAuthenticated,)
-    queryset = Subscriptor.objects.all()
-    serializer_class = SubscriptorSerializer
+    queryset = Subscriber.objects.all()
+    serializer_class = SubscriberSerializer
 
 
-class RetrieveUpdateDestroySubscriptor(generics.RetrieveUpdateDestroyAPIView):
+class RetrieveUpdateDestroySubscriber(generics.RetrieveUpdateDestroyAPIView):
     """
-    Endpoint responsible for retrieving, updating and destroying subscriptor 
+    Endpoint responsible for retrieving, updating and destroying subscriber 
     instances
     """
     throttle_classes = ()
     permission_classes = (IsAuthenticated,)
-    queryset = Subscriptor.objects.all()
-    serializer_class = SubscriptorSerializer
+    queryset = Subscriber.objects.all()
+    serializer_class = SubscriberSerializer
     lookup_field = 'id'
+

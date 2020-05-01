@@ -5,9 +5,9 @@ from users.api_v1 import endpoints
 urlpatterns = [
     # {% url 'api_v1_users:users' %}
     path(
-        route='subscriptors/',
-        view=endpoints.RetrieveSubscriptorsList.as_view(),
-        name='subscriptors_list'
+        route='subscribers/',
+        view=endpoints.RetrieveSubscribersList.as_view(),
+        name='subscribers_list'
     ),
     path(
         route='users/staff/register/',
@@ -21,9 +21,9 @@ urlpatterns = [
     ),
 
     path(
-        route='users/subscriptors/',
-        view=endpoints.CreateSubscriptorEndpoint.as_view(),
-        name='subscriptors'
+        route='users/subscribers/',
+        view=endpoints.CreateSubscriberEndpoint.as_view(),
+        name='subscribers'
     ),
     path(
         route='users/login/',
@@ -31,8 +31,8 @@ urlpatterns = [
         name='user_login'
     ),
     path(
-        route='subscriptors/<uuid:id>/',
-        view=endpoints.RetrieveUpdateDestroySubscriptor.as_view(),
-        name='subscriptor_retrieve'
+        route='subscribers/<uuid:id>/',
+        view=endpoints.RetrieveUpdateDestroySubscriber.as_view(),
+        name='subscriber_retrieve'
     ),
 ]
