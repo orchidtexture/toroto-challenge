@@ -21,12 +21,3 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         }
 
 
-class SubscriptionUpdateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Subscription
-        fields = (
-            'monthly_fee',
-            'co2_tons_per_month'
-        )
-

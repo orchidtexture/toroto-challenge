@@ -8,7 +8,7 @@ from rest_framework import generics
 from users.models import Subscriber
 
 from subscriptions.models import Subscription
-from .serializers import SubscriptionSerializer, SubscriptionUpdateSerializer
+from .serializers import SubscriptionSerializer
 
 class CreateSubscription(APIView):
     """ Endpoint responsible for creating a subscription """
@@ -39,10 +39,3 @@ class CreateSubscription(APIView):
  
         return Response(status.HTTP_201_CREATED)
 
-
-class RetrieveSubscription(generics.RetrieveUpdateAPIView):
-    throttle_classes = ()
-    permission_classes = ()
-    queryset = Subscription.objects.all()
-    serializer_class = SubscriptionUpdateSerializer
-    lookup_field = 'id'
