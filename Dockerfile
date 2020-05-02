@@ -2,8 +2,7 @@ FROM python:3.6
 ENV PYTHONUNBUFFERED 1
 
 # Install curl, node, & yarn
-RUN apt-get install ca-certificates \
-  && apt-get -y install curl \
+RUN apt-get -y install curl \
   && curl -sL https://deb.nodesource.com/setup_14.x | bash \
   && apt-get install nodejs \
   && curl -o- -L https://yarnpkg.com/install.sh | bash
