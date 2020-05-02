@@ -1,0 +1,1 @@
+web: gunicorn toroto_challenge.wsgi --log-file -
