@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get -y install curl \
   && curl -sL https://deb.nodesource.com/setup_14.x | bash \
   && apt-get install nodejs \
-  && curl -k -o- -L https://yarnpkg.com/install.sh | bash
+  && curl -o- -L http://yarnpkg.com/install.sh | bash
 
 WORKDIR /app/backend
 
