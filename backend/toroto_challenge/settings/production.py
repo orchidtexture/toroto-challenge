@@ -20,7 +20,17 @@ ALLOWED_HOSTS = ['https://secret-shelf-40223.herokuapp.com/']
 INSTALLED_APPS.extend(["whitenoise.runserver_nostatic"])
 
 # Configuration for whitenoise
-MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
+# MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
 # STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, '/assets/')
 # STATICFILES_DIRS = (
