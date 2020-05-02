@@ -3,9 +3,9 @@ ENV PYTHONUNBUFFERED 1
 
 # Install curl, node, & yarn
 RUN apt-get -y install curl \
-  && curl -sL https://deb.nodesource.com/setup_14.x | bash \
+  && curl -sL -k https://deb.nodesource.com/setup_14.x | bash \
   && apt-get install nodejs \
-  && curl -o- -L https://yarnpkg.com/install.sh | bash
+  && curl -o- -L -k https://yarnpkg.com/install.sh | bash
 
 WORKDIR /app/backend
 
