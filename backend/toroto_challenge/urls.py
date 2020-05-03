@@ -27,4 +27,5 @@ urlpatterns = [
         ('subscriptions.api_v1.urls', 'api_v1'),
         namespace='api_v1_subscriptions')
     ),
+    re_path(".*", TemplateView.as_view(template_name="index.html")),
 ]
