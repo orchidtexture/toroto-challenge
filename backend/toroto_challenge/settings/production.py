@@ -37,25 +37,19 @@ MIDDLEWARE = [
 #     os.path.join(BASE_DIR, 'assets'),
 # )
 
-STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, '/assets/')
-STATIC_ROOT = os.path.join(os.getcwd(), "static")
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, '../front/src/assets/'),
 # )
 
-STATICFILES_DIRS = [os.path.join(os.getcwd(), "../toroto_challenge/static")]
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Simplified static file serving.
-# https://warehouse.python.org/project/whitenoise/
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "../", "frontend", "build")]
 
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, "../", "frontend", "build", "static")]
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "../", "frontend", "build", "static")]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
+STATIC_URL = "/static/"
 WHITENOISE_ROOT = os.path.join(BASE_DIR, "../", "frontend", "build", "root")
