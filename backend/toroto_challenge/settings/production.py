@@ -14,7 +14,7 @@ DATABASES['default'] = dj_database_url.config(conn_max_age=500)
 
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['https://secret-shelf-40223.herokuapp.com/']
 
 INSTALLED_APPS.extend(["whitenoise.runserver_nostatic"])
