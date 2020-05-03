@@ -44,7 +44,7 @@ STATIC_ROOT = os.path.join(os.getcwd(), "static")
 #     os.path.join(BASE_DIR, '../front/src/assets/'),
 # )
 
-STATICFILES_DIRS = [os.path.join(os.getcwd(), "static")]
+STATICFILES_DIRS = [os.path.join(os.getcwd(), "../toroto_challenge/static")]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
