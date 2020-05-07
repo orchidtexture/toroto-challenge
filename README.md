@@ -24,3 +24,28 @@
 - Stop all services `docker-compose stop`
 
 - Open the shell `docker-compose exec backend /bin/sh`
+
+## API Usage Example
+
+1. Register as an user:
+    - url: https://secret-shelf-40223.herokuapp.com/api/v1/users/staff/register/
+    - method: POST
+    - body: (Select raw and JSON options)
+    ```json
+    {
+        "email": "your email",
+        "password": "your password",
+        "first_name": "your first name",
+        "last_name": "your last name"
+    }
+    ```
+    ![register example](register_example.png)
+2. Copy the auth token from the response
+3. Create a new request for subscribers list:
+    - header: 
+        - `Key = Authorization` 
+        - `value = Token {paste_token}`
+    - url: https://secret-shelf-40223.herokuapp.com/api/v1/subscribers/
+    - method: GET
+    
+    ![subscribers list example](subscribers_list_example.png)
