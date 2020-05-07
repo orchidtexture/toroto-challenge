@@ -113,12 +113,18 @@
     - body:
     ```json
     {
-        "email": "subscriber's updated email",
+        "email": "ssubscriber's updated email",
         "first_name": "subscriber's updated first name",
-        "last_name": "subscriber's updated last name",
-        "co2_tons_per_year": "9.00"
+        "last_name": "subscriber's updated laste name",
+        "co2_tons_per_year": "9.00",
+        "has_subscription": true,
+        "subscription": {
+            "monthly_fee": "6.00",
+            "co2_tons_per_month": "0.40"
+        }
     }
     ```
+    Note: The has_subscription=true is required in order to update the subscription. 
 7. Create new subscription
     - url: https://secret-shelf-40223.herokuapp.com/api/v1/subscriptions/  
     - method: `POST`
